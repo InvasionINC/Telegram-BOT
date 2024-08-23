@@ -1,0 +1,71 @@
+// Created by -> KosmoNavt.cpp ; @KosmoNavt001 (Telegram)
+
+const Telegraf = require('telegraf');
+const fs = require('fs');
+
+const bot = new Telegraf('YOURBOTTOKEN'); // Bot token
+const channelId = 'YOURCHANNELID'; // Your channel ID
+const adminUserId = 779; // Your ID
+
+function saveUserId(userId) {
+  fs.appendFile('Test.txt', ${userId};, (err) => {
+    if (err) {
+      console.error(Ошибка при записи в файл: ${err.message});
+    } else {
+      console.log(ID ${userId} успешно сохранен в Test.txt);
+    }
+  });
+}
+
+function readUserIdsFromFile() {
+  return new Promise((resolve, reject) => {
+    fs.readFile('Test.txt', 'utf8', (err, data) => {
+      if (err) {
+        return reject(err);
+      }
+      const userIds = data.split(';').filter(id => id).map(Number);
+      resolve(userIds);
+    });
+  });
+}
+
+bot.on('newchatmembers', async (ctx) => {
+  const newMembers = ctx.message.newchatmembers;
+
+  for (let member of newMembers) {
+    const userId = member.id;
+
+    await bot.telegram.sendMessage(userId, 'Привет! Спасибо за участие в нашем канале!');
+    saveUserId(userId);
+    await ctx.telegram.addChatMember(channelId, userId);
+  }
+});
+
+bot.command('/NewPost', async (ctx) => {
+  if (ctx.message.from.id === adminUserId) {
+    const postMessage = ctx.message.text.split('/NewPost ')1;
+
+    if (postMessage) {
+      const userIds = await readUserIdsFromFile();
+
+      for (const userId of userIds) {
+        try {
+          await bot.telegram.sendMessage(userId, postMessage);
+        } catch (error) {
+          console.error(Не удалось отправить сообщение пользователю ${userId}: ${error.message});
+        }
+      }
+      ctx.reply('Сообщение успешно отправлено всем пользователям.');
+    } else {
+      ctx.reply('Пожалуйста, укажите текст сообщения после команды /NewPost.');
+    }
+  } else {
+    ctx.reply('У вас нет доступа к этой команде.');
+  }
+});
+
+bot.launch().then(() => {
+  console.log('Бот запущен и готов к работе!');
+}).catch((error) => {
+  console.error(Ошибка при запуске бота: ${error.message});
+});
