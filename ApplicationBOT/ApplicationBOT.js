@@ -4,7 +4,7 @@ const Telegraf = require('telegraf');
 const fs = require('fs');
 
 const bot = new Telegraf('6990691963:AAEwcBHxTjyitgJyAE3AMxyS54ALAxmjamA'); // Bot token
-const channelId = 'Y-1002235172680'; // Your channel ID
+const channelId = '-1002235172680'; // Your channel ID
 const adminUserId = 5952558257; // Your ID
 console.log('Бот запущен и готов к работе!');
 
