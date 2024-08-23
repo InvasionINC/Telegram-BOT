@@ -69,3 +69,9 @@ bot.launch().then(() => {
 }).catch((error) => {
   console.error(Ошибка при запуске бота: ${error.message});
 });
+
+// This bot sends a greeting in private messages to the user
+// If he threw a request into the channel
+// The bot accepts his request. 
+// Team /NewPost creates a post that will be sent to all bot users
+// Bot users are saved to a file Test.txt
