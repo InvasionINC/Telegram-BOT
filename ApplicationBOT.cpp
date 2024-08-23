@@ -1,3 +1,5 @@
+// Cteater -> KosmoNavt.cpp | @KosmoNavt001 (Telegram)
+
 #include <iostream>
 #include <fstream>
 #include <string>
